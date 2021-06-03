@@ -1,9 +1,4 @@
-import 'package:call_center/src/core/models/Call.dart';
-import 'package:call_center/src/core/structures/MListNode.dart';
-
 abstract class MList<E> {
-  MListNode<E> anchor;
-
   int lastIndex;
 
   MList() {
@@ -25,6 +20,9 @@ abstract class MList<E> {
   /// Return true if list is not empty.
   bool get isNotEmpty;
 
+  /// To do something for each element.
+  void forEach(void action(E entry));
+
   /// Method to add an element to List
   void add(E element);
 
@@ -40,10 +38,11 @@ abstract class MList<E> {
   /// Get List of elements that complains the function
   MList<E> where(bool Function(E) whereFunction);
 
-  /// For each element do
-  MList<E> forEach(E Function(E) forEach);
-  MList<E> sort([int Function(E, E) compare]);
+  List map(T Function<T>(E) func);
+
+  /// Remove al items from list.
   void clear();
+
   String toString();
 
   E operator [](int index);

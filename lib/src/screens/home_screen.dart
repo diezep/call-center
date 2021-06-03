@@ -1,4 +1,4 @@
-import 'package:call_center/src/screens/agent_screen.dart';
+import 'package:call_center/src/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -22,8 +22,7 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 64),
                     child: Text(
                       'Call\nCenter',
-                      style: textTheme.headline2
-                          .apply(fontWeightDelta: 3, color: Colors.black),
+                      style: textTheme.headline2.apply(fontWeightDelta: 3),
                     ),
                   )),
               Center(

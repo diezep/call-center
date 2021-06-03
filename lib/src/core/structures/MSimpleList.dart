@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:call_center/src/core/abstraction/MList.dart';
 import 'package:call_center/src/core/structures/MListNode.dart';
+import 'package:flutter/material.dart';
 
 class MSimpleList<E> extends MList<E> {
   MSimpleList() : super();
+
+  MListNode<E> anchor;
 
   @override
   E operator [](int index) {
@@ -13,7 +18,6 @@ class MSimpleList<E> extends MList<E> {
       if (aux.next == null) throw MListException.RangeError();
       aux = aux.next;
     }
-
     return aux.data;
   }
 
@@ -26,16 +30,18 @@ class MSimpleList<E> extends MList<E> {
 
     MListNode tmp = this.anchor;
 
-    for (var i = 0; i < lastIndex; i++) {
-      if (i == index) {
+    for (var i = 0; i <= lastIndex; i++) {
+      if (lastIndex - i == index) {
         _list.add(element);
+        tmp = tmp.next;
         continue;
       }
       _list.add(tmp.data);
       tmp = tmp.next;
     }
 
-    this.anchor = _list.anchor;
+    this.clear();
+    this.addAll(_list);
   }
 
   @override
@@ -50,25 +56,15 @@ class MSimpleList<E> extends MList<E> {
   }
 
   @override
-  void addAll(list) {
-    for (var i = 0; i < list.length; i++) this.add(list[i]);
-  }
-
-  @override
-  MList<E> forEach(Function(E) f) {
-    // MListNode tmpNode = anchor;
-    // for (var i = 0; i <= lastIndex; i++) {
-    //   if (i == index)
-    //     tmpData = tmp.data;
-    //   else
-    //     _list.add(tmp.data);
-    //   tmp = tmp.next;
-    // }
+  void addAll(MList<E> list) {
+    list?.forEach((element) {
+      this.add(element);
+    });
   }
 
   @override
   void remove(E element) {
-    MSimpleList<E> _list = MSimpleList();
+    MSimpleList<E> _rlist = MSimpleList();
     bool removed = false;
 
     MListNode<E> tmp = anchor;
@@ -77,17 +73,17 @@ class MSimpleList<E> extends MList<E> {
       if (!removed && tmp?.data == element)
         removed = true;
       else
-        _list.add(tmp.data);
+        _rlist.add(tmp.data);
       tmp = tmp.next;
     }
 
-    this.lastIndex--;
-    this.anchor = _list.anchor;
+    this.clear();
+    this.addAll(_rlist);
   }
 
   @override
   E removeAt(int index) {
-    MSimpleList<E> _list = MSimpleList();
+    MSimpleList<E> _rlist = MSimpleList();
 
     if (index < 0) throw MListException.RangeError();
     if (index > lastIndex) throw MListException.RangeError();
@@ -96,21 +92,15 @@ class MSimpleList<E> extends MList<E> {
     E tmpData;
 
     for (var i = 0; i <= lastIndex; i++) {
-      if (i == index)
+      if (lastIndex - i == index)
         tmpData = tmp.data;
       else
-        _list.add(tmp.data);
+        _rlist.add(tmp.data);
       tmp = tmp.next;
     }
-    this.lastIndex--;
-    this.anchor = _list.anchor;
+    this.clear();
+    this.addAll(_rlist);
     return tmpData;
-  }
-
-  @override
-  MList<E> sort([int Function(E, E) compare]) {
-    // TODO: implement sort
-    throw UnimplementedError();
   }
 
   @override
@@ -158,5 +148,42 @@ class MSimpleList<E> extends MList<E> {
     }
 
     return toString;
+  }
+
+  @override
+  List map(T Function<T>(E) func) {
+    var mappedItems = [];
+    MListNode tmp = anchor;
+    E tmpData;
+
+    for (var i = 0; i <= lastIndex; i++) {
+      mappedItems.add(func(tmp.data));
+      tmp = tmp.next;
+    }
+    return mappedItems;
+  }
+
+  List<Widget> toWidgets(Widget Function(E) func) {
+    List<Widget> widgets = [];
+
+    MListNode tmp = anchor;
+    E tmpData;
+
+    for (var i = 0; i <= lastIndex; i++) {
+      widgets.add(func(tmp.data));
+      tmp = tmp.next;
+    }
+    return widgets;
+  }
+
+  @override
+  void forEach(void action(E entry)) {
+    if (isEmpty) return;
+
+    MListNode<E> aux = anchor;
+    while (aux?.data != null) {
+      action(aux.data);
+      aux = aux.next;
+    }
   }
 }

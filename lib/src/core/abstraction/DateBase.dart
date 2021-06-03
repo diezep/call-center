@@ -15,10 +15,8 @@ abstract class DateBase {
   bool operator <=(otherDate);
   bool operator >=(otherDate);
 
-
   String toString();
   bool isValid();
-
 }
 
 class DateException {

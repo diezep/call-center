@@ -1,24 +1,30 @@
 import 'package:call_center/src/core/abstraction/AgentBase.dart';
 import 'package:call_center/src/core/abstraction/WeekSchedule.dart';
 import 'package:call_center/src/core/enum/AgentSpecialty.dart';
-import 'package:call_center/src/core/models/client.dart';
+import 'package:call_center/src/core/models/Client.dart';
 import 'package:call_center/src/core/abstraction/MList.dart';
+import 'package:call_center/src/core/structures/MSimpleList.dart';
 
 class Agent extends AgentBase {
   Agent({
-    MList<Client> clients,
+    MSimpleList<Client> clients,
     String name = 'Diego Zepeda',
     String id,
-    WeekSchedule weekSchedule,
-    int extensionNumber,
+    String image,
+    String extensionNumber,
     int extraWeeekHours,
     AgentSpeciality speciality = AgentSpeciality.NoSelected,
   }) : super(
             name: name,
             id: id,
+            image: image,
             extensionNumber: extensionNumber,
             extraWeeekHours: extraWeeekHours,
             speciality: speciality,
-            weekSchedule: weekSchedule,
             clients: clients);
+
+  @override
+  String toString() {
+    return name;
+  }
 }

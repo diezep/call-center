@@ -47,6 +47,24 @@ class Date extends DateBase {
   @override
   // TODO: implement timeSinceEponch
   int get timeSinceEponch => throw UnimplementedError();
+
+  static Date fromJson(Map<String, dynamic> json) {
+    return Date(
+      month: json['month'] as int,
+      year: json['year'] as int,
+      day: json['day'] as int,
+      hour: json['hour'] as int,
+      seconds: json['seconds'] as int,
+    );
+  }
+
+  static Map<String, dynamic> toJson(Date instance) => <String, dynamic>{
+        'month': instance.month,
+        'year': instance.year,
+        'day': instance.day,
+        'hour': instance.hour,
+        'seconds': instance.seconds,
+      };
 }
 
 class DateException {

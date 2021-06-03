@@ -1,1 +1,1 @@
-abstract class WeekSchedule {}
+class WeekSchedule {}

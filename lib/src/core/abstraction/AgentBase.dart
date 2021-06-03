@@ -1,26 +1,27 @@
 import 'package:call_center/src/core/abstraction/WeekSchedule.dart';
 import 'package:call_center/src/core/abstraction/employee.dart';
 import 'package:call_center/src/core/enum/AgentSpecialty.dart';
-import 'package:call_center/src/core/models/client.dart';
-import 'package:call_center/src/core/abstraction/MList.dart';
+import 'package:call_center/src/core/models/Client.dart';
+import 'package:call_center/src/core/structures/MSimpleList.dart';
 
 abstract class AgentBase extends Employee {
-  int extensionNumber;
+  String extensionNumber;
   int extraWeeekHours;
-  MList<Client> clients;
+  MSimpleList<Client> clients;
   AgentSpeciality speciality;
+  String image;
+
   AgentBase({
     String name,
     String id,
-    WeekSchedule weekSchedule,
     this.extensionNumber,
+    this.image,
     this.extraWeeekHours,
     this.clients,
     this.speciality,
   }) : super(
           name: name,
           id: id,
-          weekSchedule: weekSchedule,
         );
 
   String toString();
