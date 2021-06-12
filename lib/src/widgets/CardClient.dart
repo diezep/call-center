@@ -99,7 +99,7 @@ class _CardClientState extends State<CardClient> {
                   ],
                 ),
                 children: [
-                  for (var i = 0; i < widget.client.calls.length; i++)
+                  for (int i = 0; i < widget.client.calls.length; i++)
                     ListTile(
                       leading: Icon(Icons.call),
                       title: Text(

@@ -24,7 +24,8 @@ class _MyAppState extends State<MyApp> {
         cardColor: ColorHelper.backgroundContrast,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              primary: ColorHelper.primaryElevatedButtonColor),
+            primary: ColorHelper.primaryElevatedButtonColor,
+          ),
         ),
       ),
       home: DashboardScreen(),

@@ -12,7 +12,7 @@ class MLinkedList<E> extends MList<E> {
     if (index < 0) throw MListException.NegativeIndex();
     if (index > lastIndex) throw MListException.RangeError();
 
-    for (var i = 0; i < lastIndex - index; i++) {
+    for (int i = 0; i < lastIndex - index; i++) {
       if (aux.next == null) throw MListException.RangeError();
       aux = aux.next;
     }
@@ -29,7 +29,7 @@ class MLinkedList<E> extends MList<E> {
 
     MLinkedListNode<E> tmp = this.anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (index == lastIndex - i) {
         _rlist.add(element);
         tmp = tmp.next;
@@ -69,7 +69,7 @@ class MLinkedList<E> extends MList<E> {
 
     MLinkedListNode<E> tmp = anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (!removed && tmp?.data == element)
         removed = true;
       else
@@ -91,7 +91,7 @@ class MLinkedList<E> extends MList<E> {
     MLinkedListNode<E> tmp = anchor;
     E tmpData;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (lastIndex - i == index)
         tmpData = tmp.data;
       else
@@ -155,7 +155,7 @@ class MLinkedList<E> extends MList<E> {
 
     MLinkedListNode<E> tmp = anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       widgets.add(func(tmp.data));
       tmp = tmp.next;
     }

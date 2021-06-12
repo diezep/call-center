@@ -30,7 +30,7 @@ class Agent extends AgentBase {
   static Agent fromMap(Map<String, dynamic> map) {
     MSimpleList<Client> _clients = MSimpleList<Client>();
     if (map['clients'] != null)
-      for (var c in map['clients'] as List) _clients.add(Client.fromMap(c));
+      for (Map c in map['clients'] as List) _clients.add(Client.fromMap(c));
 
     return Agent(
       name: map["name"],
@@ -53,7 +53,7 @@ class Agent extends AgentBase {
       "speciality": agentSpecialityToString(speciality),
       "clients": [
         if (clients != null)
-          for (var i = 0; i < clients.length; i++) clients[i].toMap()
+          for (int i = 0; i < clients.length; i++) clients[i].toMap()
       ]
     };
   }

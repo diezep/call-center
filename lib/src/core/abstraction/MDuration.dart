@@ -1,16 +1,16 @@
 class MDuration {
   int hours;
   int minutes;
-  MDuration({this.hours, this.minutes});
+  MDuration({this.hours, this.minutes}) {
+    _isValid(throwException: true);
+  }
 
   @override
   String toString() => "$hours:$minutes";
 
-  static MDuration fromString(String durationStr) {
-    return MDuration(
-        hours: durationStr.split(":")[0] as int,
-        minutes: durationStr.split(":")[1] as int);
-  }
+  static MDuration fromString(String durationStr) => MDuration(
+      hours: durationStr.split(":")[0] as int,
+      minutes: durationStr.split(":")[1] as int);
 
   Map<String, dynamic> toMap() => {
         "hours": hours,
@@ -21,6 +21,14 @@ class MDuration {
         hours: map["hours"],
         minutes: map["minutes"],
       );
+
+  bool _isValid({bool throwException = false}) {
+    if (hours < 0 || hours > 23) return false;
+    if (minutes < 0 || minutes > 59) return false;
+
+    if (throwException) throw MDurationException("Invalid duration foramt");
+    return true;
+  }
 }
 
 class MDurationException implements Exception {

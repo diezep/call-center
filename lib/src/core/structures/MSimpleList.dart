@@ -12,7 +12,7 @@ class MSimpleList<E> extends MList<E> {
     MListNode<E> aux = anchor;
     if (index < 0) throw MListException.NegativeIndex();
 
-    for (var i = 0; i < lastIndex - index; i++) {
+    for (int i = 0; i < lastIndex - index; i++) {
       if (aux.next == null) throw MListException.RangeError();
       aux = aux.next;
     }
@@ -21,25 +21,25 @@ class MSimpleList<E> extends MList<E> {
 
   @override
   void operator []=(int index, E element) {
-    MSimpleList<E> _list = MSimpleList();
+    MSimpleList<E> _rlist = MSimpleList();
 
     if (index < 0) throw MListException.NegativeIndex();
     if (index > lastIndex) throw MListException.RangeError();
 
     MListNode tmp = this.anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (lastIndex - i == index) {
-        _list.add(element);
+        _rlist.add(element);
         tmp = tmp.next;
         continue;
       }
-      _list.add(tmp.data);
+      _rlist.add(tmp.data);
       tmp = tmp.next;
     }
 
     this.clear();
-    this.addAll(_list);
+    this.addAll(_rlist);
   }
 
   @override
@@ -67,7 +67,7 @@ class MSimpleList<E> extends MList<E> {
 
     MListNode<E> tmp = anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (!removed && tmp?.data == element)
         removed = true;
       else
@@ -89,7 +89,7 @@ class MSimpleList<E> extends MList<E> {
     MListNode tmp = anchor;
     E tmpData;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       if (lastIndex - i == index)
         tmpData = tmp.data;
       else
@@ -166,7 +166,7 @@ class MSimpleList<E> extends MList<E> {
 
     MListNode tmp = anchor;
 
-    for (var i = 0; i <= lastIndex; i++) {
+    for (int i = 0; i <= lastIndex; i++) {
       widgets.add(func(tmp.data));
       tmp = tmp.next;
     }

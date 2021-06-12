@@ -35,7 +35,7 @@ class Client extends ClientBase {
         "telephone": telephoneNumber ?? '',
         "calls": [
           if (calls != null)
-            for (var i = 0; i < calls.length; i++) calls[i].toMap()
+            for (int i = 0; i < calls.length; i++) calls[i].toMap()
         ]
       };
 

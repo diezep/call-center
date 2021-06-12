@@ -5,6 +5,7 @@ import 'package:call_center/src/core/abstraction/MList.dart';
 import 'package:call_center/src/core/enum/DataType.dart';
 import 'package:call_center/src/core/models/Agent.dart';
 import 'package:call_center/src/core/models/DataInformation.dart';
+import 'package:call_center/src/core/models/Date.dart';
 import 'package:call_center/src/core/structures/MLinkedList.dart';
 
 import 'package:call_center/src/core/values.dart';
@@ -18,27 +19,27 @@ class DiskProvider {
   Future writeInDisk(MList<Agent> agents) async {
     Map<String, dynamic> mapToJson = {
       "agents": [
-        for (var i = 0; i < agents.length; i++) agents[i].toJson(),
+        for (int i = 0; i < agents.length; i++) agents[i].toJson(),
       ]
     };
 
     String json = jsonEncode(mapToJson);
 
-    var file = await _localFile(agentsPath);
+    File file = await _localFile(agentsPath);
     file.writeAsString(json);
 
-    print("Guardado en memoria: ${DateTime.now()}");
+    print("Guardado en memoria: ${Date.now()}");
   }
 
   Future<MLinkedList<Agent>> readFromDisk() async {
     MLinkedList<Agent> _agents = MLinkedList<Agent>();
-    var file = await _localFile(agentsPath);
+    File file = await _localFile(agentsPath);
     if (!await file.exists()) return _agents;
     String jsonEncoded = await file.readAsString();
 
     Map<String, dynamic> mapJson = jsonDecode(jsonEncoded);
 
-    for (var agent in mapJson["agents"] as List) {
+    for (Map agent in mapJson["agents"] as List) {
       _agents.add(Agent.fromMap(agent));
     }
 
@@ -46,8 +47,9 @@ class DiskProvider {
     return _agents;
   }
 
+  /// Get the information about Images directory
   Future<DataInformation> get imagesInfo async {
-    var _imagesDir = await _localDirectory(agentsImagesDirPath);
+    Directory _imagesDir = await _localDirectory(agentsImagesDirPath);
     if (!await _imagesDir.exists())
       return DataInformation(0, 0, DataType.IMAGES);
     int _sizeBits = 0, _length = 0;
@@ -72,7 +74,7 @@ class DiskProvider {
     Directory dirAgentImages = await _localDirectory(agentsImagesDirPath);
     if (!await dirAgentImages.exists()) return;
 
-    var fileToRemove = File("${dirAgentImages.absolute.path}/$nameImage.jpg");
+    File fileToRemove = File("${dirAgentImages.absolute.path}/$nameImage.jpg");
 
     fileToRemove.deleteSync();
   }
@@ -82,16 +84,16 @@ class DiskProvider {
     Directory dirAgentImages = await _localDirectory(agentsImagesDirPath);
     if (!await dirAgentImages.exists()) dirAgentImages.create();
 
-    var fileToCopy = File(imagePathToSave);
+    File fileToCopy = File(imagePathToSave);
 
-    var newFile =
+    File newFile =
         await fileToCopy.copy("${dirAgentImages.absolute.path}/$nameImage.jpg");
 
     return newFile.path;
   }
 
   Future<void> removeAgentImages() async {
-    var appPath = await _localPath;
+    String appPath = await _localPath;
 
     Directory dirAgentImages = Directory("$appPath/$agentsImagesDirPath");
 

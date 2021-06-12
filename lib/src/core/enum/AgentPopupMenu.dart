@@ -1,2 +1,5 @@
-/// Options from Popup Menu on Agent
-enum AgentPopupMenu { UPDATE, REMOVE }
+/// Options from Popup Menu on Agent Card
+enum AgentPopupMenu {
+  UPDATE,
+  REMOVE,
+}

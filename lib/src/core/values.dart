@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ColorHelper {
-  static Color primaryTextColor = Colors.white;
-  static Color secondTextColor = Colors.white.withOpacity(0.6);
+  static Color get primaryTextColor => Colors.white;
+  static Color get secondTextColor => Colors.white.withOpacity(0.6);
 
-  static Color background = Color(0xFF202333);
-  static Color backgroundContrast = Color(0xFF282C3E);
+  static Color get background => Color(0xFF202333);
+  static Color get backgroundContrast => Color(0xFF282C3E);
 
-  static Color primaryElevatedButtonColor = Color(0xFF009567);
-  static Color dangerElevatedButtonColor = Colors.red[900].withOpacity(0.7);
+  static Color get primaryElevatedButtonColor => Color(0xFF009567);
+  static Color get dangerElevatedButtonColor =>
+      Colors.red[900].withOpacity(0.7);
 
-  static Color iconColor = Color(0xFF00FFB0);
-  static Color iconVertColor = Colors.grey;
+  static Color get iconColor => Color(0xFF00FFB0);
+  static Color get iconVertColor => Colors.grey;
 }
 
 /// File name of JSON DB

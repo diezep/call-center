@@ -448,24 +448,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void merge<E>(
       bool Function(E, E) compareFunction, MList<E> list, int l, int m, int r) {
-    var n1 = m - l + 1;
-    var n2 = r - m;
+    int n1 = m - l + 1;
+    int n2 = r - m;
 
     MSimpleList<E> L = MSimpleList(), R = MSimpleList();
 
-    for (var i = 0; i < n1; i++) L.add(list[l + i]);
-    for (var j = 0; j < n2; j++) R.add(list[m + 1 + j]);
+    for (int i = 0; i < n1; i++) L.add(list[l + i]);
+    for (int j = 0; j < n2; j++) R.add(list[m + 1 + j]);
 
     // Merge the temp arrays back into arr[l..r]
 
     // Initial index of first subarray
-    var i = 0;
+    int i = 0;
 
     // Initial index of second subarray
-    var j = 0;
+    int j = 0;
 
     // Initial index of merged subarray
-    var k = l;
+    int k = l;
 
     while (i < n1 && j < n2) {
       if (compareFunction(L[i], R[j])) {
