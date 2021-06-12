@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:call_center/src/core/abstraction/MList.dart';
 import 'package:call_center/src/core/structures/MListNode.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +165,6 @@ class MSimpleList<E> extends MList<E> {
     List<Widget> widgets = [];
 
     MListNode tmp = anchor;
-    E tmpData;
 
     for (var i = 0; i <= lastIndex; i++) {
       widgets.add(func(tmp.data));

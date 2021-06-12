@@ -25,4 +25,6 @@ abstract class AgentBase extends Employee {
 
   bool operator ==(otherClient);
   String toString();
+  @override
+  int get hashCode => super.hashCode;
 }

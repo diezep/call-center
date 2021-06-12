@@ -10,7 +10,6 @@ import 'package:call_center/src/core/models/Client.dart';
 import 'package:call_center/src/core/models/DataInformation.dart';
 import 'package:call_center/src/core/structures/MLinkedList.dart';
 import 'package:call_center/src/core/structures/MSimpleList.dart';
-import 'package:call_center/src/core/utils.dart';
 
 import 'package:call_center/src/core/values.dart';
 import 'package:call_center/src/providers/DiskProvider.dart';
@@ -390,7 +389,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _onRemoveAgent() async {}
   void _onFilterSelected(FilterAgents filter) {
     MSimpleList<Agent> agents = MSimpleList();
 

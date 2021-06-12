@@ -32,13 +32,10 @@ class CardAgent extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  ThemeData theme;
-  TextTheme textTheme;
-
   @override
   Widget build(BuildContext context) {
-    theme = Theme.of(context);
-    textTheme = theme.textTheme;
+    ThemeData theme = Theme.of(context);
+    TextTheme textTheme = theme.textTheme;
 
     return Container(
       width: 200,

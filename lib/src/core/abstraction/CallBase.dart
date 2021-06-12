@@ -4,15 +4,17 @@ import 'package:call_center/src/core/models/Date.dart';
 abstract class CallBase {
   CallBase({String id, MDuration duration, Date date});
 
-  String get id => id;
-  MDuration get duration => duration;
-  Date get date => date;
+  String get id;
+  MDuration get duration;
+  Date get date;
 
-  set id(String newValue) => id = newValue;
-  set duration(MDuration newValue) => duration = newValue;
-  set date(Date newValue) => date = newValue;
+  set id(String newValue);
+  set duration(MDuration newValue);
+  set date(Date newValue);
 
   bool operator ==(otherCall);
 
   String toString();
+  @override
+  int get hashCode => super.hashCode;
 }

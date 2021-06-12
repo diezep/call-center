@@ -154,7 +154,6 @@ class MLinkedList<E> extends MList<E> {
     List<Widget> widgets = [];
 
     MLinkedListNode<E> tmp = anchor;
-    E tmpData;
 
     for (var i = 0; i <= lastIndex; i++) {
       widgets.add(func(tmp.data));

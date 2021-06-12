@@ -1,5 +1,3 @@
-import 'package:call_center/src/core/structures/MSimpleList.dart';
-
 abstract class MList<E> {
   int lastIndex;
 

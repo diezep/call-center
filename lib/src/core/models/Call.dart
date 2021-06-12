@@ -35,4 +35,20 @@ class Call extends CallBase {
         "duration": duration.toMap(),
         "date": date.toMap(),
       };
+
+
+  @override
+  String get id => id;
+  @override
+  MDuration get duration => duration;
+  @override
+  Date get date => date;
+
+ 
+  @override  
+  set id(String newValue) => id = newValue;
+  @override
+  set duration(MDuration newValue) => duration = newValue;
+  @override
+  set date(Date newValue) => date = newValue;
 }

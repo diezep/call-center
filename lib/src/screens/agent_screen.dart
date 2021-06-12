@@ -24,7 +24,7 @@ class AgentProfileScreen extends StatefulWidget {
 
   final Agent agent;
 
-  void Function() onRemoveClients;
+  final void Function() onRemoveClients;
   final Function(Client) onAddClient, onRemoveClient;
   final Function(Client, Call) onUpdateCall, onAddCall, onRemoveCall;
 

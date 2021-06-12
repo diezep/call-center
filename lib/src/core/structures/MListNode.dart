@@ -1,5 +1,3 @@
-import 'package:call_center/src/core/structures/MLinkedListNode.dart';
-
 class MListNode<E> {
   E _data;
   MListNode<E> _next;

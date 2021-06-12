@@ -1,4 +1,3 @@
-import 'package:call_center/listtest.dart';
 import 'package:call_center/src/core/values.dart';
 import 'package:call_center/src/screens/dashboard_screen.dart';
 
@@ -16,7 +15,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    testing();
     return MaterialApp(
       title: 'Call Center',
       debugShowCheckedModeBanner: false,
