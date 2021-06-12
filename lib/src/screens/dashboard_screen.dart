@@ -44,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   DiskProvider diskProvider = DiskProvider();
 
   Future _readSavedData() async {
-    MLinkedList<Agent> tmpAgents = await diskProvider.readFromDisk();
+    MLinkedList<Agent> tmpAgents = await diskProvider.readAgentsFromDisk();
     setState(() {
       _agents = tmpAgents;
     });
@@ -363,7 +363,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } catch (e) {}
     setState(() => _agents.clear());
     try {
-      await diskProvider.writeInDisk(_agents);
+      await diskProvider.writeAgentsInDisk(_agents);
     } catch (e) {}
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -371,7 +371,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onSaveData() async {
-    await diskProvider.writeInDisk(_agents);
+    await diskProvider.writeAgentsInDisk(_agents);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Agentes e información guardados correctamente")));
   }
@@ -385,7 +385,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         agents.add(newAgent);
       });
-      diskProvider.writeInDisk(_agents);
+      diskProvider.writeAgentsInDisk(_agents);
     }
   }
 

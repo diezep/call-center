@@ -16,7 +16,7 @@ class DiskProvider {
   String agentsPath = kDbName;
   String agentsImagesDirPath = "agents-images";
 
-  Future writeInDisk(MList<Agent> agents) async {
+  Future writeAgentsInDisk(MList<Agent> agents) async {
     Map<String, dynamic> mapToJson = {
       "agents": [
         for (int i = 0; i < agents.length; i++) agents[i].toJson(),
@@ -31,7 +31,7 @@ class DiskProvider {
     print("Guardado en memoria: ${Date.now()}");
   }
 
-  Future<MLinkedList<Agent>> readFromDisk() async {
+  Future<MLinkedList<Agent>> readAgentsFromDisk() async {
     MLinkedList<Agent> _agents = MLinkedList<Agent>();
     File file = await _localFile(agentsPath);
     if (!await file.exists()) return _agents;
