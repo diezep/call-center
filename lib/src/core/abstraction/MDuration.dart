@@ -1,9 +1,7 @@
 class MDuration {
   int hours;
   int minutes;
-  MDuration({this.hours, this.minutes}) {
-    _isValid(throwException: true);
-  }
+  MDuration({this.hours, this.minutes});
 
   @override
   String toString() => "$hours:$minutes";

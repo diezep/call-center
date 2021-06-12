@@ -18,20 +18,6 @@ class Date extends DateBase {
     if (!isValid()) throw DateException("Invalid date foramt");
   }
 
-  int get month => month;
-  int get year => year;
-  int get day => day;
-  int get hour => hour;
-  int get seconds => seconds;
-  int get minutes => minutes;
-
-  set month(int newValue) => month = newValue;
-  set year(int newValue) => year = newValue;
-  set day(int newValue) => day = newValue;
-  set hour(int newValue) => hour = newValue;
-  set seconds(int newValue) => seconds = newValue;
-  set minutes(int newValue) => minutes = newValue;
-
   @override
   bool isValid([bool throwException = false]) {
     if (day < 1 || day > 31) return false;
