@@ -18,5 +18,21 @@ class Call extends CallBase {
     toStr += "$id";
     toStr += "$duration";
     toStr += "$date";
+    return toStr;
   }
+
+  @override
+  bool operator ==(otherCall) => this.id = otherCall.id;
+
+  static Call fromMap(Map<String, dynamic> map) => Call(
+        id: map["id"],
+        duration: MDuration.fromMap(map["duration"]),
+        date: Date.fromMap(map["date"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "duration": duration.toMap(),
+        "date": date.toMap(),
+      };
 }

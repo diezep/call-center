@@ -1,6 +1,8 @@
 import 'package:call_center/src/core/models/Call.dart';
 import 'package:call_center/src/core/structures/MSimpleList.dart';
 
+import 'CallBase.dart';
+
 abstract class ClientBase {
   String id;
   String name;
@@ -17,5 +19,5 @@ abstract class ClientBase {
   @override
   int get hashCode => super.hashCode;
 
-  void addCall(call);
+  void addCall(CallBase call);
 }

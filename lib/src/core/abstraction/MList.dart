@@ -1,9 +1,9 @@
+import 'package:call_center/src/core/structures/MSimpleList.dart';
+
 abstract class MList<E> {
   int lastIndex;
 
-  MList() {
-    lastIndex = -1;
-  }
+  MList() : lastIndex = -1;
 
   /// Get the first element added in list.
   E get first;
@@ -38,23 +38,24 @@ abstract class MList<E> {
   /// Get List of elements that complains the function
   MList<E> where(bool Function(E) whereFunction);
 
-  List map(T Function<T>(E) func);
-
   /// Remove al items from list.
   void clear();
 
+  /// Convert List to readable String
   String toString();
 
+  /// Read data from index on List Nodes
   E operator [](int index);
+
+  /// Set data from index on List Nodes
   operator []=(int index, E element);
 
   /// In Dart. Private method can't be overrided. It have to be implemented on
   /// extendend class.
   // bool _isValid(int index);
-
 }
 
-class MListException {
+class MListException implements Exception {
   String message;
 
   MListException(this.message);

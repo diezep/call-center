@@ -7,10 +7,18 @@ class ColorHelper {
   static Color background = Color(0xFF202333);
   static Color backgroundContrast = Color(0xFF282C3E);
 
-  static Color elevatedButtonColor = Color(0xFF009567);
+  static Color primaryElevatedButtonColor = Color(0xFF009567);
+  static Color dangerElevatedButtonColor = Colors.red[900].withOpacity(0.7);
 
   static Color iconColor = Color(0xFF00FFB0);
   static Color iconVertColor = Colors.grey;
 }
 
-const dbName = "db.json";
+/// File name of JSON DB
+const String kDbName = "agents.json";
+
+/// Decimals of formated data size
+const int kDecimalBitsFormat = 0;
+
+/// App icon image
+Image kAppIcon = Image.asset("assets/icon.png", width: 26);

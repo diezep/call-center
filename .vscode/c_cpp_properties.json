@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/Users/diezep/Documents/Experiments"
             ],
             "defines": [],
             "macFrameworkPath": [

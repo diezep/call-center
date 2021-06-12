@@ -10,8 +10,9 @@ class MLinkedList<E> extends MList<E> {
   E operator [](int index) {
     MLinkedListNode<E> aux = anchor;
     if (index < 0) throw MListException.NegativeIndex();
+    if (index > lastIndex) throw MListException.RangeError();
 
-    for (var i = 0; i < index; i++) {
+    for (var i = 0; i < lastIndex - index; i++) {
       if (aux.next == null) throw MListException.RangeError();
       aux = aux.next;
     }
@@ -55,9 +56,10 @@ class MLinkedList<E> extends MList<E> {
 
   @override
   void addAll(MList<E> list) {
-    list.forEach((element) {
-      this.add(element);
-    });
+    if (list?.isNotEmpty ?? false)
+      list.forEach((element) {
+        this.add(element);
+      });
   }
 
   @override
@@ -127,10 +129,10 @@ class MLinkedList<E> extends MList<E> {
   get last => this[lastIndex];
 
   @override
-  bool get isEmpty => anchor.data == null;
+  bool get isEmpty => anchor?.data == null;
 
   @override
-  bool get isNotEmpty => anchor.data != null;
+  bool get isNotEmpty => anchor?.data != null;
 
   @override
   int get length => lastIndex + 1;
@@ -141,24 +143,11 @@ class MLinkedList<E> extends MList<E> {
     MLinkedListNode<E> aux = anchor;
     while (aux?.data != null) {
       toString += aux.data.toString();
-      toString += aux.next?.data == null ? "]" : ", ";
+      toString += aux?.next?.data == null ? "]" : ", ";
       aux = aux.next;
     }
 
     return toString;
-  }
-
-  @override
-  List map(T Function<T>(E) func) {
-    var mappedItems = [];
-    MLinkedListNode<E> tmp = anchor;
-    E tmpData;
-
-    for (var i = 0; i <= lastIndex; i++) {
-      mappedItems.add(func(tmp.data));
-      tmp = tmp.next;
-    }
-    return mappedItems;
   }
 
   List<Widget> toWidgets(Widget Function(E) func) {

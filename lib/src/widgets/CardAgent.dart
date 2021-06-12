@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:call_center/src/core/enum/AgentPopupMenu.dart';
 import 'package:call_center/src/core/enum/AgentSpecialty.dart';
 import 'package:call_center/src/core/models/Agent.dart';
+import 'package:call_center/src/core/models/Call.dart';
+import 'package:call_center/src/core/models/Client.dart';
 import 'package:call_center/src/core/values.dart';
 import 'package:call_center/src/widgets/AddAgentDialog.dart';
 import 'package:call_center/src/screens/agent_screen.dart';
@@ -9,9 +14,23 @@ import 'package:flutter/widgets.dart';
 
 class CardAgent extends StatelessWidget {
   final Agent agent;
-  final Function onRemove, onModified;
-  CardAgent({this.agent, this.onRemove, this.onModified, Key key})
-      : super(key: key);
+  final void Function() onRemoveAgent, onRemoveClients;
+  final Function(Agent) onUpdateAgent;
+  final Function(Client) onAddClient, onRemoveClient;
+  final void Function(Client, Call) onAddCall, onUpdateCall, onRemoveCall;
+
+  CardAgent({
+    this.agent,
+    this.onRemoveAgent,
+    this.onUpdateAgent,
+    this.onAddClient,
+    this.onRemoveClient,
+    this.onAddCall,
+    this.onUpdateCall,
+    this.onRemoveCall,
+    this.onRemoveClients,
+    Key key,
+  }) : super(key: key);
 
   ThemeData theme;
   TextTheme textTheme;
@@ -39,8 +58,19 @@ class CardAgent extends StatelessWidget {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              AgentProfileScreen(agent: agent))),
+                        builder: (context) => AgentProfileScreen(
+                            agent: agent,
+                            onAddClient: (Client newClient) =>
+                                onAddClient(newClient),
+                            onRemoveClient: (Client client) =>
+                                onRemoveClient(client),
+                            onAddCall: onAddCall,
+                            onUpdateCall: (Client client, Call call) =>
+                                onUpdateCall(client, call),
+                            onRemoveCall: (Client client, Call call) =>
+                                onRemoveCall(client, call),
+                            onRemoveClients: onRemoveClients),
+                      )),
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   title: Column(
@@ -56,6 +86,7 @@ class CardAgent extends StatelessWidget {
                       SizedBox(height: 3),
                       Wrap(
                         spacing: 5,
+                        runSpacing: 4,
                         children: [
                           Badge(
                             agentSpecialityToString(agent.speciality),
@@ -64,7 +95,7 @@ class CardAgent extends StatelessWidget {
                             color: ColorHelper.iconColor.withOpacity(0.4),
                           ),
                           Text(
-                            "${agent.clients ?? 0} CLIENTES",
+                            "${agent?.clients?.length ?? 0} CLIENTES",
                             style: textTheme.caption,
                           ),
                         ],
@@ -83,8 +114,8 @@ class CardAgent extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: Colors.black,
                     maxRadius: 32,
-                    backgroundImage: agent.image != null
-                        ? Image.network(agent.image).image
+                    backgroundImage: agent?.image?.isNotEmpty ?? false
+                        ? Image.file(File(agent.image)).image
                         : null,
                   )),
               Padding(
@@ -92,27 +123,29 @@ class CardAgent extends StatelessWidget {
                 child: PopupMenuButton(
                   offset: Offset(0, 50),
                   icon: Icon(Icons.more_vert),
-                  onSelected: (value) async {
-                    print(value);
-                    if (value == 'Eliminar')
-                      onRemove();
-                    else if (value == 'Modificar') {
-                      Agent nAgent = await showDialog(
-                          context: context,
-                          builder: (context) => AddAgentDialog(
-                                agent: agent,
-                              ));
-                      if (nAgent != null) onModified(agent);
+                  onSelected: (AgentPopupMenu option) async {
+                    switch (option) {
+                      case AgentPopupMenu.UPDATE:
+                        Agent tmpAgent = await showDialog(
+                            context: context,
+                            builder: (context) => AddAgentDialog(
+                                  agent: agent,
+                                ));
+                        if (tmpAgent != null) onUpdateAgent(agent);
+
+                        break;
+                      case AgentPopupMenu.REMOVE:
+                        onRemoveAgent();
                     }
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       child: Text('Modificar'),
-                      value: 'Modificar',
+                      value: AgentPopupMenu.UPDATE,
                     ),
                     PopupMenuItem(
                       child: Text('Eliminar'),
-                      value: 'Eliminar',
+                      value: AgentPopupMenu.REMOVE,
                     ),
                   ],
                 ),

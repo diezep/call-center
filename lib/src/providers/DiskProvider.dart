@@ -1,124 +1,101 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:call_center/src/core/abstraction/MDuration.dart';
 import 'package:call_center/src/core/abstraction/MList.dart';
-import 'package:call_center/src/core/enum/AgentSpecialty.dart';
+import 'package:call_center/src/core/enum/DataType.dart';
 import 'package:call_center/src/core/models/Agent.dart';
-import 'package:call_center/src/core/models/Call.dart';
-import 'package:call_center/src/core/models/Client.dart';
-import 'package:call_center/src/core/models/Date.dart';
-import 'package:call_center/src/core/structures/MSimpleList.dart';
+import 'package:call_center/src/core/models/DataInformation.dart';
+import 'package:call_center/src/core/structures/MLinkedList.dart';
+
+import 'package:call_center/src/core/values.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DiskProvider {
-  String delimitator = "+-+-+";
-
   // Paths
-  String agentsPath = "agents.txt";
-  String clientsPath = "clients.txt";
-  String callsPath = "calls.txt";
+  String agentsPath = kDbName;
+  String agentsImagesDirPath = "agents-images";
 
   Future writeInDisk(MList<Agent> agents) async {
-    String agentsToWrite = "";
-    String clientsToWrite = "";
-    String callsToWrite = "";
+    Map<String, dynamic> mapToJson = {
+      "agents": [
+        for (var i = 0; i < agents.length; i++) agents[i].toJson(),
+      ]
+    };
 
-    MList<Call> _callsToSave = MSimpleList<Call>();
-    MList<Client> _clientsToSave = MSimpleList<Client>();
-
-    agents.forEach((a) {
-      agentsToWrite += "${a.id}\n";
-      agentsToWrite += "${a.name}\n";
-      agentsToWrite += "${a.image}\n";
-      agentsToWrite += "${a.extraWeeekHours}\n";
-      agentsToWrite += "${a.extensionNumber}\n";
-      agentsToWrite += "${agentSpecialityToString(a.speciality)}\n";
-      agentsToWrite += "$delimitator\n";
-
-      if (a.clients != null && a.clients.length > 0)
-        _clientsToSave.addAll(a.clients);
-    });
-
-    _clientsToSave?.forEach((c) {
-      clientsToWrite += "${c.id}\n";
-      clientsToWrite += "${c.name}\n";
-      clientsToWrite += "${c.telephoneNumber}\n";
-      clientsToWrite += "$delimitator\n";
-
-      if (c.calls != null && c.calls.length > 0) _callsToSave.addAll(c.calls);
-    });
-
-    _callsToSave?.forEach((c) {
-      callsToWrite += "${c.id}\n";
-      callsToWrite += "${c.duration}\n";
-      callsToWrite += "${c.date}\n";
-      callsToWrite += "$delimitator\n";
-    });
+    String json = jsonEncode(mapToJson);
 
     var file = await _localFile(agentsPath);
-    file.writeAsString('$agentsToWrite');
+    file.writeAsString(json);
 
-    file = await _localFile(clientsPath);
-    file.writeAsString('$clientsToWrite');
-
-    file = await _localFile(callsPath);
-    file.writeAsString('$callsToWrite');
-
-    print("Escrito en disco.");
+    print("Guardado en memoria: ${DateTime.now()}");
   }
 
-  Future<MList<Agent>> readFromDisk() async {
-    MList<Agent> agents = MSimpleList<Agent>();
-    MList<Client> clients = MSimpleList<Client>();
-    MList<Call> calls = MSimpleList<Call>();
-    int i = 0;
+  Future<MLinkedList<Agent>> readFromDisk() async {
+    MLinkedList<Agent> _agents = MLinkedList<Agent>();
+    var file = await _localFile(agentsPath);
+    if (!await file.exists()) return _agents;
+    String jsonEncoded = await file.readAsString();
 
-    // Agents
-    final fileAgents = await _localFile(agentsPath);
-    final contentsAgents = fileAgents.readAsLinesSync();
-    while (i < contentsAgents.length) {
-      Agent nAgent = Agent(
-        id: parseNull(contentsAgents[i++]),
-        name: parseNull(contentsAgents[i++]),
-        image: parseNull(contentsAgents[i++]),
-        extraWeeekHours: (parseNull(contentsAgents[i++]) ?? 0) as int,
-        extensionNumber: parseNull(contentsAgents[i++]),
-        speciality: agentSpecialityFromString(contentsAgents[i++]),
-      );
-      agents.add(nAgent);
-      i++;
+    Map<String, dynamic> mapJson = jsonDecode(jsonEncoded);
+
+    for (var agent in mapJson["agents"] as List) {
+      _agents.add(Agent.fromMap(agent));
     }
 
-    // Clients
-    final fileClients = await _localFile(clientsPath);
-    final contentsClients = await fileClients.readAsLinesSync();
-    i = 0;
-    while (i < contentsClients.length) {
-      Client nClient = Client(
-        id: parseNull(contentsClients[i++]),
-        name: parseNull(contentsClients[i++]),
-        telephoneNumber: parseNull(contentsClients[i++]),
-      );
-      clients.add(nClient);
-      i++;
+    print("Leído desde memoria: ${DateTime.now()}");
+    return _agents;
+  }
+
+  Future<DataInformation> get imagesInfo async {
+    var _imagesDir = await _localDirectory(agentsImagesDirPath);
+    if (!await _imagesDir.exists())
+      return DataInformation(0, 0, DataType.IMAGES);
+    int _sizeBits = 0, _length = 0;
+
+    try {
+      _imagesDir
+          .listSync(recursive: true, followLinks: false)
+          .forEach((FileSystemEntity entity) {
+        if (entity is File) {
+          _sizeBits += entity.lengthSync();
+          _length++;
+        }
+      });
+    } catch (e) {
+      print(e.toString());
     }
 
-    // Calls
-    final fileCalls = await _localFile(clientsPath);
-    final contentsCalls = await fileCalls.readAsLinesSync();
-    i = 0;
-    while (i < contentsCalls.length) {
-      Call nCall = Call(
-        id: parseNull(contentsCalls[i++]),
-        duration: parseNull(contentsCalls[i++]) as MDuration,
-        date: parseNull(contentsCalls[i++]) as Date,
-      );
-      calls.add(nCall);
-      i++;
-    }
+    return DataInformation(_sizeBits, _length, DataType.IMAGES);
+  }
 
-    return agents;
+  Future<void> removeAgentImage(String nameImage) async {
+    Directory dirAgentImages = await _localDirectory(agentsImagesDirPath);
+    if (!await dirAgentImages.exists()) return;
+
+    var fileToRemove = File("${dirAgentImages.absolute.path}/$nameImage.jpg");
+
+    fileToRemove.deleteSync();
+  }
+
+  Future<String> saveImageAgent(
+      String nameImage, String imagePathToSave) async {
+    Directory dirAgentImages = await _localDirectory(agentsImagesDirPath);
+    if (!await dirAgentImages.exists()) dirAgentImages.create();
+
+    var fileToCopy = File(imagePathToSave);
+
+    var newFile =
+        await fileToCopy.copy("${dirAgentImages.absolute.path}/$nameImage.jpg");
+
+    return newFile.path;
+  }
+
+  Future<void> removeAgentImages() async {
+    var appPath = await _localPath;
+
+    Directory dirAgentImages = Directory("$appPath/$agentsImagesDirPath");
+
+    await dirAgentImages.delete(recursive: true);
   }
 }
 
@@ -132,39 +109,9 @@ Future<File> _localFile(String fileName) async {
   return File('$path/$fileName');
 }
 
-dynamic parseNull(String str) => str == "null" ? null : str;
+Future<Directory> _localDirectory(String dirName) async {
+  final path = await _localPath;
+  return Directory('$path/$dirName');
+}
 
-/*
-{
-  "clients" : [
-    {
-      "id"
-      "name"
-      "agentId"
-    }
-  ],
-  "agents" : [
-    {
-      "id"
-      "name"
-      ...
-    },
-    {
-      "id"
-      "name"
-      ...
-    },
-  ],
-  "calls":[
-    {
-      "id"
-      "clientId"
-      "agentId"
-    },
-    {
-      "id"
-      "clientId"
-      "agentId"
-    },
-  ]
-}*/
+dynamic parseNull(String str) => str == "null" ? null : str;

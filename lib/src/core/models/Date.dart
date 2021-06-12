@@ -1,73 +1,85 @@
 import 'package:call_center/src/core/abstraction/DateBase.dart';
 
 class Date extends DateBase {
-  int month;
-  int year;
-  int day;
-  int hour;
-  int seconds;
+  Date(
+      {int month,
+      int year,
+      int day,
+      int hour = 0,
+      int seconds = 0,
+      int minutes = 0})
+      : super(
+            month: month,
+            year: year,
+            day: day,
+            hour: hour,
+            seconds: seconds,
+            minutes: minutes) {
+    if (!isValid()) throw DateException("Invalid date foramt");
+  }
 
-  Date({this.month, this.year, this.day, this.hour = 0, this.seconds = 0}) {
-    if (day < 1 || day > 31) throw DateException("Invalid day.");
-    if (hour < 0 || hour > 24) throw DateException("Invalid hour.");
-    if (seconds < 0 || seconds > 59) throw DateException("Invalid seconds.");
-    if (month < 0 || month > 12) throw DateException("Invalid month.");
+  int get month => month;
+  int get year => year;
+  int get day => day;
+  int get hour => hour;
+  int get seconds => seconds;
+  int get minutes => minutes;
+
+  set month(int newValue) => month = newValue;
+  set year(int newValue) => year = newValue;
+  set day(int newValue) => day = newValue;
+  set hour(int newValue) => hour = newValue;
+  set seconds(int newValue) => seconds = newValue;
+  set minutes(int newValue) => minutes = newValue;
+
+  @override
+  bool isValid([bool throwException = false]) {
+    if (day < 1 || day > 31) return false;
+    if (hour < 0 || hour > 24) return false;
+    if (seconds < 0 || seconds > 59) return false;
+    if (minutes < 0 || minutes > 59) return false;
+    if (month < 0 || month > 12) return false;
+
+    if (throwException) throw DateException("Invalid date foramt");
+    return true;
   }
 
   @override
-  bool operator <(otherDate) {
-    // TODO: implement <
-    throw UnimplementedError();
-  }
+  String toString() => "$day/$month/$year $hour:$minutes";
 
-  @override
-  bool operator <=(otherDate) {
-    // TODO: implement <=
-    throw UnimplementedError();
-  }
+  /// Get the actual date.
+  static Date now() {
+    DateTime now = DateTime.now();
 
-  @override
-  bool operator >(otherDate) {
-    // TODO: implement >
-    throw UnimplementedError();
-  }
-
-  @override
-  bool operator >=(otherDate) {
-    // TODO: implement >=
-    throw UnimplementedError();
-  }
-
-  @override
-  bool isValid() {
-    // TODO: implement isValid
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement timeSinceEponch
-  int get timeSinceEponch => throw UnimplementedError();
-
-  static Date fromJson(Map<String, dynamic> json) {
     return Date(
-      month: json['month'] as int,
-      year: json['year'] as int,
-      day: json['day'] as int,
-      hour: json['hour'] as int,
-      seconds: json['seconds'] as int,
-    );
+        year: now.year,
+        day: now.day,
+        month: now.month,
+        hour: now.hour,
+        minutes: now.minute);
   }
 
-  static Map<String, dynamic> toJson(Date instance) => <String, dynamic>{
-        'month': instance.month,
-        'year': instance.year,
-        'day': instance.day,
-        'hour': instance.hour,
-        'seconds': instance.seconds,
+  /// Convert Date from Map
+  static Date fromMap(Map<String, dynamic> map) => Date(
+        month: map['month'] as int,
+        year: map['year'] as int,
+        day: map['day'] as int,
+        hour: map['hour'] as int,
+        seconds: map['seconds'] as int,
+      );
+
+  /// Convert Date to Map
+  Map<String, dynamic> toMap() => {
+        'month': month,
+        'year': year,
+        'day': day,
+        'hour': hour,
+        'seconds': seconds,
       };
 }
 
-class DateException {
+///  Class to throw exceptions from Date
+class DateException implements Exception {
   String message;
   DateException(this.message);
 }

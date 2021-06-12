@@ -1,4 +1,3 @@
-import 'package:call_center/src/core/abstraction/WeekSchedule.dart';
 import 'package:call_center/src/core/abstraction/employee.dart';
 import 'package:call_center/src/core/enum/AgentSpecialty.dart';
 import 'package:call_center/src/core/models/Client.dart';
@@ -24,5 +23,6 @@ abstract class AgentBase extends Employee {
           id: id,
         );
 
+  bool operator ==(otherClient);
   String toString();
 }

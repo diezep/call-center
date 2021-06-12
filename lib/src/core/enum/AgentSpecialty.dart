@@ -1,25 +1,40 @@
+import 'dart:math';
+
 enum AgentSpeciality {
-  Servidores,
-  Escritorios,
-  Portatiles,
-  Impresoras,
-  Redes,
-  NoSelected
+  SERVERS,
+  DESKTOPS,
+  LAPTOPS,
+  PRINTERS,
+  COMPUTER_NETWORKS,
+  LINUX,
+  NO_SELECTED
 }
+
 String agentSpecialityToString(AgentSpeciality _) => {
-      AgentSpeciality.Servidores: 'Servidores'.toUpperCase(),
-      AgentSpeciality.Escritorios: 'Escritorios'.toUpperCase(),
-      AgentSpeciality.Portatiles: 'Portatiles'.toUpperCase(),
-      AgentSpeciality.Impresoras: 'Impresoras'.toUpperCase(),
-      AgentSpeciality.Redes: 'Redes'.toUpperCase(),
-      AgentSpeciality.NoSelected: 'NS'.toUpperCase()
+      AgentSpeciality.SERVERS: 'SERVIDORES',
+      AgentSpeciality.DESKTOPS: 'ESCRITORIOS',
+      AgentSpeciality.LAPTOPS: 'PORTATILES',
+      AgentSpeciality.PRINTERS: 'IMPRESORAS',
+      AgentSpeciality.COMPUTER_NETWORKS: 'REDES',
+      AgentSpeciality.NO_SELECTED: 'NS'.toUpperCase(),
+      AgentSpeciality.LINUX: 'LINUX'
     }[_];
 
 AgentSpeciality agentSpecialityFromString(String _) => {
-      'Servidores'.toUpperCase(): AgentSpeciality.Servidores,
-      'Escritorios'.toUpperCase(): AgentSpeciality.Escritorios,
-      'Portatiles'.toUpperCase(): AgentSpeciality.Portatiles,
-      'Impresoras'.toUpperCase(): AgentSpeciality.Impresoras,
-      'Redes'.toUpperCase(): AgentSpeciality.Redes,
-      'NS'.toUpperCase(): AgentSpeciality.NoSelected
+      'SERVIDORES': AgentSpeciality.SERVERS,
+      'ESCRITORIOS': AgentSpeciality.DESKTOPS,
+      'PORTATILES': AgentSpeciality.LAPTOPS,
+      'IMPRESORAS': AgentSpeciality.PRINTERS,
+      'REDES': AgentSpeciality.COMPUTER_NETWORKS,
+      'NS': AgentSpeciality.NO_SELECTED,
+      'LINUX': AgentSpeciality.LINUX
     }[_];
+
+AgentSpeciality getRandomAgentSpeciality() => {
+      0: AgentSpeciality.SERVERS,
+      1: AgentSpeciality.DESKTOPS,
+      2: AgentSpeciality.LAPTOPS,
+      3: AgentSpeciality.PRINTERS,
+      4: AgentSpeciality.COMPUTER_NETWORKS,
+      5: AgentSpeciality.LINUX,
+    }[Random().nextInt(6)];

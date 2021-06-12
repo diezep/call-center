@@ -4,19 +4,21 @@ abstract class DateBase {
   int day;
   int hour;
   int seconds;
+  int minutes;
 
-  DateBase({this.month, this.year, this.day, this.hour = 0, this.seconds = 0});
+  DateBase(
+      {this.month,
+      this.year,
+      this.day,
+      this.hour = 0,
+      this.seconds = 0,
+      this.minutes = 0});
 
-  int get timeSinceEponch;
-
-  bool operator ==(otherDate);
-  bool operator <(otherDate);
-  bool operator >(otherDate);
-  bool operator <=(otherDate);
-  bool operator >=(otherDate);
-
+  /// Convert to readable text.
   String toString();
-  bool isValid();
+
+  /// Check if values for the date are valid.
+  bool isValid([bool throwException]);
 }
 
 class DateException {

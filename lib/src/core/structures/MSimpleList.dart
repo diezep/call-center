@@ -14,7 +14,7 @@ class MSimpleList<E> extends MList<E> {
     MListNode<E> aux = anchor;
     if (index < 0) throw MListException.NegativeIndex();
 
-    for (var i = 0; i < index; i++) {
+    for (var i = 0; i < lastIndex - index; i++) {
       if (aux.next == null) throw MListException.RangeError();
       aux = aux.next;
     }
@@ -117,6 +117,19 @@ class MSimpleList<E> extends MList<E> {
   }
 
   @override
+  int indexWhere(bool Function(E) whereFunction) {
+    MListNode<E> tmpAnchor = this.anchor;
+    int index = 0;
+    while (tmpAnchor?.data != null) {
+      if (whereFunction(tmpAnchor.data)) return index;
+      tmpAnchor = tmpAnchor.next;
+      index++;
+    }
+
+    return null;
+  }
+
+  @override
   void clear() {
     anchor = null;
     lastIndex = -1;
@@ -143,24 +156,11 @@ class MSimpleList<E> extends MList<E> {
     MListNode<E> aux = anchor;
     while (aux?.data != null) {
       toString += "${aux.data}";
-      toString += aux.next == null ? "]" : ", ";
+      toString += aux?.next == null ? "]" : ", ";
       aux = aux.next;
     }
 
     return toString;
-  }
-
-  @override
-  List map(T Function<T>(E) func) {
-    var mappedItems = [];
-    MListNode tmp = anchor;
-    E tmpData;
-
-    for (var i = 0; i <= lastIndex; i++) {
-      mappedItems.add(func(tmp.data));
-      tmp = tmp.next;
-    }
-    return mappedItems;
   }
 
   List<Widget> toWidgets(Widget Function(E) func) {

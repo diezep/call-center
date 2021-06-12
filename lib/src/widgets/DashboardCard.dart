@@ -102,8 +102,8 @@ class DashboarCard extends StatelessWidget {
                       captionText,
                       style: textTheme.button.apply(
                           fontWeightDelta: 2,
-                          color:
-                              ColorHelper.elevatedButtonColor.withOpacity(0.5)),
+                          color: ColorHelper.primaryElevatedButtonColor
+                              .withOpacity(0.5)),
                     )
                   ],
                 ),

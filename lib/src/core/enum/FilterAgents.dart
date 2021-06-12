@@ -1,1 +1,1 @@
-enum FilterAgents { name, speciality, id, clientes }
+enum FilterAgents { NAME, SPECIALITY, ID, CLIENTS }

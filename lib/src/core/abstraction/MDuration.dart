@@ -1,19 +1,29 @@
 class MDuration {
   int hours;
-  int seconds;
-  MDuration({this.hours, this.seconds});
+  int minutes;
+  MDuration({this.hours, this.minutes});
 
   @override
-  String toString() => "$hours:$seconds";
+  String toString() => "$hours:$minutes";
 
   static MDuration fromString(String durationStr) {
     return MDuration(
         hours: durationStr.split(":")[0] as int,
-        seconds: durationStr.split(":")[1] as int);
+        minutes: durationStr.split(":")[1] as int);
   }
+
+  Map<String, dynamic> toMap() => {
+        "hours": hours,
+        "minutes": minutes,
+      };
+
+  static MDuration fromMap(Map<String, dynamic> map) => MDuration(
+        hours: map["hours"],
+        minutes: map["minutes"],
+      );
 }
 
-class MDurationException {
+class MDurationException implements Exception {
   String message;
 
   MDurationException(this.message);

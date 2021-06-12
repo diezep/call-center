@@ -1,19 +1,17 @@
 import 'package:call_center/src/core/abstraction/AgentBase.dart';
-import 'package:call_center/src/core/abstraction/WeekSchedule.dart';
 import 'package:call_center/src/core/enum/AgentSpecialty.dart';
 import 'package:call_center/src/core/models/Client.dart';
-import 'package:call_center/src/core/abstraction/MList.dart';
 import 'package:call_center/src/core/structures/MSimpleList.dart';
 
 class Agent extends AgentBase {
   Agent({
     MSimpleList<Client> clients,
-    String name = 'Diego Zepeda',
+    String name,
     String id,
     String image,
     String extensionNumber,
     int extraWeeekHours,
-    AgentSpeciality speciality = AgentSpeciality.NoSelected,
+    AgentSpeciality speciality = AgentSpeciality.NO_SELECTED,
   }) : super(
             name: name,
             id: id,
@@ -24,7 +22,39 @@ class Agent extends AgentBase {
             clients: clients);
 
   @override
-  String toString() {
-    return name;
+  String toString() => "$name $id $image $extensionNumber $speciality ";
+
+  @override
+  bool operator ==(otherAgent) => this.id == otherAgent.id;
+
+  static Agent fromMap(Map<String, dynamic> map) {
+    MSimpleList<Client> _clients = MSimpleList<Client>();
+    if (map['clients'] != null)
+      for (var c in map['clients'] as List) _clients.add(Client.fromMap(c));
+
+    return Agent(
+      name: map["name"],
+      id: map["id"],
+      image: map["image"],
+      extensionNumber: map["extensionNumber"],
+      extraWeeekHours: map["extraWeeekHours"],
+      speciality: agentSpecialityFromString(map["speciality"]),
+      clients: _clients,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "name": name ?? '',
+      "id": id ?? '',
+      "image": image ?? '',
+      "extensionNumber": extensionNumber ?? '',
+      "extraWeeekHours": extraWeeekHours ?? 0,
+      "speciality": agentSpecialityToString(speciality),
+      "clients": [
+        if (clients != null)
+          for (var i = 0; i < clients.length; i++) clients[i].toMap()
+      ]
+    };
   }
 }

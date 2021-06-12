@@ -1,7 +1,7 @@
 import 'package:call_center/listtest.dart';
 import 'package:call_center/src/core/values.dart';
 import 'package:call_center/src/screens/dashboard_screen.dart';
-import 'package:call_center/src/screens/home_screen.dart';
+
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -19,16 +19,17 @@ class _MyAppState extends State<MyApp> {
     testing();
     return MaterialApp(
       title: 'Call Center',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-          backgroundColor: ColorHelper.background,
-          cardColor: ColorHelper.backgroundContrast,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  primary: ColorHelper.elevatedButtonColor))),
-      routes: {
-        HomeScreen.routeName: (_) => HomeScreen(),
-        AgentScreen.routeName: (_) => AgentScreen(),
-      },
+        scaffoldBackgroundColor: ColorHelper.background,
+        backgroundColor: ColorHelper.background,
+        cardColor: ColorHelper.backgroundContrast,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              primary: ColorHelper.primaryElevatedButtonColor),
+        ),
+      ),
+      home: DashboardScreen(),
     );
   }
 }
