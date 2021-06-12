@@ -1,3 +1,0 @@
-LIBRARY   app_library
-EXPORTS
-    native_sum

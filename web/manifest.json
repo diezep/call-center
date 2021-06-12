@@ -1,12 +1,12 @@
 {
-    "name": "call_center",
-    "short_name": "call_center",
+    "name": "Call Center",
+    "short_name": "Call Center",
     "start_url": ".",
-    "display": "standalone",
+    "display": "landscape",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "description": "Dashboard admin of Call Center.",
+    "orientation": "landscape-primary",
     "prefer_related_applications": false,
     "icons": [
         {
