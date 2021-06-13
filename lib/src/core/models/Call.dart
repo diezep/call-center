@@ -22,7 +22,7 @@ class Call extends CallBase {
   }
 
   @override
-  bool operator ==(otherCall) => this.id = otherCall.id;
+  bool operator ==(otherCall) => this.id == (otherCall as Call).id;
 
   static Call fromMap(Map<String, dynamic> map) => Call(
         id: map["id"],

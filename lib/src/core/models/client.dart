@@ -27,7 +27,7 @@ class Client extends ClientBase {
   void addCall(call) => this.calls.add(call);
 
   @override
-  bool operator ==(otherClient) => this.id == otherClient.id;
+  bool operator ==(otherClient) => this.id == (otherClient as Client).id;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         "id": id ?? '',
