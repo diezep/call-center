@@ -40,13 +40,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   FilterAgents filterSelected = FilterAgents.NAME;
   String searchAgent;
 
-  // To save on Disk
-  DiskProvider diskProvider = DiskProvider();
+  // To save on Firebase
+  FirebaseProvider firebaseProvider = FirebaseProvider();
+  bool loadingAgents = true;
 
   Future _readSavedData() async {
-    MLinkedList<Agent> tmpAgents = await diskProvider.readAgentsFromDisk();
+    MLinkedList<Agent> tmpAgents = await firebaseProvider.readAgents();
     setState(() {
       _agents = tmpAgents;
+      loadingAgents = false;
     });
   }
 
@@ -149,22 +151,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 secondaryText: callsInfo.textType,
                 captionText: callsInfo.bitsFormated,
               ),
-              FutureBuilder<DataInformation>(
-                  future: diskProvider.imagesInfo,
-                  builder: (context, snapshot) {
-                    DataInformation _data =
-                        DataInformation(0, 0, DataType.IMAGES);
-                    if (snapshot.hasData) _data = snapshot.data;
-                    return DashboarCard(
-                      icon: Icon(
-                        Icons.image,
-                        color: Colors.white10,
-                      ),
-                      primaryText: _data.length.toString(),
-                      secondaryText: _data.textType,
-                      captionText: _data.bitsFormated,
-                    );
-                  }),
               SizedBox(height: 12),
               Center(
                 child: Wrap(
@@ -272,15 +258,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: SingleChildScrollView(
                           child: Center(
                             child: (_agents.isEmpty)
-                                ? Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(height: 128),
-                                      Text('No se han agregado agentes aún',
-                                          style: TextStyle(
-                                              fontStyle: FontStyle.italic)),
-                                    ],
-                                  )
+                                ? (loadingAgents)
+                                    ? CircularProgressIndicator()
+                                    : Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(height: 128),
+                                          Text('No se han agregado agentes aún',
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.italic)),
+                                        ],
+                                      )
                                 : Wrap(
                                     alignment: WrapAlignment.start,
                                     crossAxisAlignment:
@@ -291,7 +279,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       (e) => CardAgent(
                                         agent: e,
                                         onRemoveAgent: () async {
-                                          await diskProvider
+                                          await firebaseProvider
                                               .removeAgentImage(e.id);
                                           setState(() => _agents.remove(e));
                                         },
@@ -359,11 +347,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _onRemoveData() async {
     try {
-      await diskProvider.removeAgentImages();
+      await firebaseProvider.removeAgentImages();
     } catch (e) {}
     setState(() => _agents.clear());
     try {
-      await diskProvider.writeAgentsInDisk(_agents);
+      await firebaseProvider.writeAgentsInFirebase(_agents);
     } catch (e) {}
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -371,7 +359,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onSaveData() async {
-    await diskProvider.writeAgentsInDisk(_agents);
+    await firebaseProvider.writeAgentsInFirebase(_agents);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Agentes e información guardados correctamente")));
   }
@@ -385,7 +373,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         agents.add(newAgent);
       });
-      diskProvider.writeAgentsInDisk(_agents);
+      firebaseProvider.writeAgentsInFirebase(_agents);
     }
   }
 

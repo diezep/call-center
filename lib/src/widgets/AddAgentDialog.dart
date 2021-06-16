@@ -150,7 +150,7 @@ class _AddAgentDialogState extends State<AddAgentDialog> {
   }
 
   _onSave(context) async {
-    DiskProvider diskProvider = DiskProvider();
+    FirebaseProvider diskProvider = FirebaseProvider();
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
 

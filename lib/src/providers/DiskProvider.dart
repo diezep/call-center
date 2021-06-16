@@ -9,38 +9,39 @@ import 'package:call_center/src/core/models/Date.dart';
 import 'package:call_center/src/core/structures/MLinkedList.dart';
 
 import 'package:call_center/src/core/values.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:path_provider/path_provider.dart';
 
-class DiskProvider {
+class FirebaseProvider {
   // Paths
   String agentsPath = kDbName;
   String agentsImagesDirPath = "agents-images";
 
-  Future writeAgentsInDisk(MList<Agent> agents) async {
-    Map<String, dynamic> mapToJson = {
-      "agents": [
-        for (int i = 0; i < agents.length; i++) agents[i].toJson(),
-      ]
-    };
+  Future writeAgentsInFirebase(MList<Agent> agents) async {
+    var agentsCollection = FirebaseFirestore.instance.collection('agents');
 
-    String json = jsonEncode(mapToJson);
+    for (int i = 0; i < agents.length; i++) {
+      Agent _agent = agents[i];
+      var docAgent = await agentsCollection.doc(_agent.id).get();
 
-    File file = await _localFile(agentsPath);
-    file.writeAsString(json);
-
-    print("Guardado en memoria: ${Date.now()}");
+      if (!docAgent.exists) {
+        agentsCollection.doc(_agent.id).set(_agent.toJson());
+      }
+    }
+    print("Guardado en Firebase: ${Date.now()}");
   }
 
-  Future<MLinkedList<Agent>> readAgentsFromDisk() async {
+  Future<MLinkedList<Agent>> readAgents() async {
     MLinkedList<Agent> _agents = MLinkedList<Agent>();
-    File file = await _localFile(agentsPath);
-    if (!await file.exists()) return _agents;
-    String jsonEncoded = await file.readAsString();
+    var agentsCollection = FirebaseFirestore.instance.collection('agents');
 
-    Map<String, dynamic> mapJson = jsonDecode(jsonEncoded);
+    var docs = await agentsCollection.get();
 
-    for (Map agent in mapJson["agents"] as List) {
-      _agents.add(Agent.fromMap(agent));
+    for (var docAgent in docs.docs) {
+      Agent newAgent = Agent.fromMap(docAgent.data());
+      newAgent.id = docAgent.id;
+      _agents.add(newAgent);
     }
 
     print("Leído desde memoria: ${DateTime.now()}");

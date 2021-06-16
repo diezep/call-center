@@ -1,9 +1,12 @@
 import 'package:call_center/src/core/values.dart';
 import 'package:call_center/src/screens/dashboard_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(MyApp());
 }
 
